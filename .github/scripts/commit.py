@@ -15,5 +15,5 @@ time = now.strftime('%y-%m-%d-%H-%M-%S')
 
 subprocess.run('git config --global user.email noreply@arkfans.top', shell=True)
 subprocess.run('git config --global user.name MeeBooBot_v0', shell=True)
-subprocess.run('git add .', shell=True)
+subprocess.run('git add version', shell=True)
 subprocess.run(f'git commit -m \'[UPDATE] Data:{time}-{calc_version()[7:]}\'', shell=True)
