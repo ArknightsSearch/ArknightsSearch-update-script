@@ -86,6 +86,8 @@ jobs:
         run: |
           cp -rf data resource/data
           cd resource
+          git config --global user.name MeeBooBot_v0
+          git config --global user.email noreply@arkfans.top
           git add data
           git commit -m "$MESSAGE"
           git push
