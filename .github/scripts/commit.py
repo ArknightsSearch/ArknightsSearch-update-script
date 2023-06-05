@@ -12,8 +12,12 @@ def calc_version() -> str:
 utc = datetime.utcnow().replace(tzinfo=timezone.utc)
 now = utc.astimezone(timezone(timedelta(hours=8)))
 time = now.strftime('%y-%m-%d-%H-%M-%S')
+version = calc_version()[:7]
+commit_message = '\'[UPDATE] Data:{time}-{version}\''
+
+subprocess.run(f'echo "MESSAGE={commit_message}" >> $GITHUB_ENV', shell=True)
 
 subprocess.run('git config --global user.email noreply@arkfans.top', shell=True)
 subprocess.run('git config --global user.name MeeBooBot_v0', shell=True)
 subprocess.run('git add version', shell=True)
-subprocess.run(f'git commit -m \'[UPDATE] Data:{time}-{calc_version()[:7]}\'', shell=True)
+subprocess.run(f'git commit -m {commit_message}', shell=True)

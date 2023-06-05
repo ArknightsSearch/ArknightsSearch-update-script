@@ -62,3 +62,30 @@ jobs:
           python .github/scripts/commit.py
           git push
         if: env.update == 1
+
+      - name: Generate Token
+        id: token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_KEY }}
+          repository: Arkfans/ArknightsName
+        if: env.update == 1
+
+      - name: GetResourceRepo
+        uses: actions/checkout@v3
+        with:
+          repository: ArknightsSearch/ArknightsSearch-resource
+          path: resource
+          token: ${{ steps.token.outputs.token }}
+
+      - name: Commit Resource Change
+        env:
+          MESSAGE: ${{ env.MESSAGE }}
+        run: |
+          cp -rf data resource/data
+          cd resource
+          git add data
+          git commit -m $MESSAGE
+          git push
+        if: env.update == 1
