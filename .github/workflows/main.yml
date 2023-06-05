@@ -78,6 +78,7 @@ jobs:
           repository: ArknightsSearch/ArknightsSearch-resource
           path: resource
           token: ${{ steps.token.outputs.token }}
+        if: env.update == 1
 
       - name: Commit Resource Change
         env:
