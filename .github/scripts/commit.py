@@ -13,7 +13,7 @@ utc = datetime.utcnow().replace(tzinfo=timezone.utc)
 now = utc.astimezone(timezone(timedelta(hours=8)))
 time = now.strftime('%y-%m-%d-%H-%M-%S')
 version = calc_version()[:7]
-commit_message = '\'[UPDATE] Data:{time}-{version}\''
+commit_message = f'\'[UPDATE] Data:{time}-{version}\''
 
 subprocess.run(f'echo "MESSAGE={commit_message}" >> $GITHUB_ENV', shell=True)
 
