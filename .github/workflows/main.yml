@@ -87,6 +87,6 @@ jobs:
           cp -rf data resource/data
           cd resource
           git add data
-          git commit -m $MESSAGE
+          git commit -m "$MESSAGE"
           git push
         if: env.update == 1
