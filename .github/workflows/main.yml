@@ -69,7 +69,7 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_KEY }}
-          repository: Arkfans/ArknightsName
+          repository: ArknightsSearch/ArknightsSearch-resource
         if: env.update == 1
 
       - name: GetResourceRepo
