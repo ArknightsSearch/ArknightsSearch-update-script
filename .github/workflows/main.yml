@@ -84,7 +84,8 @@ jobs:
         env:
           MESSAGE: ${{ env.MESSAGE }}
         run: |
-          cp -rf data resource/data
+          rm -rf resource/data
+          \cp -rf data resource
           cd resource
           git config --global user.name MeeBooBot_v0
           git config --global user.email noreply@arkfans.top
