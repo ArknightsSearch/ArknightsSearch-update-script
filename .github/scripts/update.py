@@ -37,8 +37,6 @@ def run():
     else:
         os.system('echo "update=0" >> $GITHUB_ENV')
 
-    os.system('echo "update=1" >> $GITHUB_ENV')
-
 
 if __name__ == '__main__':
     run()
