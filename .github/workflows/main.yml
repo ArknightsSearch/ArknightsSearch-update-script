@@ -26,6 +26,17 @@ jobs:
           repository: Kengxxiao/ArknightsGameData
           path: gamedata
 
+      - name: GetYosterGamedata
+        uses: actions/checkout@v3
+        with:
+          repository: Kengxxiao/ArknightsGameData_YoStar
+          path: gamedata_yoster
+
+      - name: sync data
+        run: |
+          \cp -rf gamedata_yoster/en_US/ gamedata/en_US
+          \cp -rf gamedata_yoster/ja_JP/ gamedata/ja_JP
+
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
