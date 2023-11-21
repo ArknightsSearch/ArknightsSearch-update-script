@@ -34,6 +34,8 @@ jobs:
 
       - name: sync data
         run: |
+          rm -rf gamedata/en_US
+          rm -rf gamedata/ja_JP
           \cp -rf gamedata_yoster/en_US/ gamedata/en_US
           \cp -rf gamedata_yoster/ja_JP/ gamedata/ja_JP
 
