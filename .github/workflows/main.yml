@@ -39,6 +39,17 @@ jobs:
           \cp -rf gamedata_yoster/en_US/ gamedata/en_US
           \cp -rf gamedata_yoster/ja_JP/ gamedata/ja_JP
 
+      - name: Patch script
+        run: |
+          python3 -c "
+          p = __import__('pathlib').Path('script/core/name/activity.py')
+          t = p.read_text()
+          old = \"    activity_id2code[zone_id] = stage_data['code'].split('-')[0]\"
+          new = \"    if not stage_data['code']:\n        continue\n\n\" + old
+          assert old in t, 'Patch target not found in activity.py'
+          p.write_text(t.replace(old, new))
+          "
+
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
