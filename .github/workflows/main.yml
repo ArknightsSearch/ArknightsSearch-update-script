@@ -12,22 +12,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: GetScript
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ArknightsSearch/ArknightsSearch-data
           path: script
 
+      - name: PatchScript
+        run: |
+          cp .github/patches/activity.py script/core/name/activity.py
+
       - name: GetGameData
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: Kengxxiao/ArknightsGameData
           path: gamedata
 
       - name: GetYosterGamedata
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: Kengxxiao/ArknightsGameData_YoStar
           path: gamedata_yoster
@@ -40,7 +44,7 @@ jobs:
           \cp -rf gamedata_yoster/ja_JP/ gamedata/ja_JP
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           architecture: x64
@@ -86,7 +90,7 @@ jobs:
         if: env.update == 1
 
       - name: GetResourceRepo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ArknightsSearch/ArknightsSearch-resource
           path: resource
