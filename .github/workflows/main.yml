@@ -20,58 +20,40 @@ jobs:
           repository: ArknightsSearch/ArknightsSearch-data
           path: script
 
-      - name: GetGameData
-        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          repository: Kengxxiao/ArknightsGameData
-          path: gamedata
+          python-version: '3.14'
 
-      - name: GetYosterGamedata
-        uses: actions/checkout@v4
-        with:
-          repository: Kengxxiao/ArknightsGameData_YoStar
-          path: gamedata_yoster
+      - name: Sync dependencies
+        run: uv sync
+        working-directory: script
 
-      - name: sync data
+      - name: Fetch game data
+        run: uv run python fetch_gamedata.py
+        working-directory: script
+
+      - name: Parse game data
+        run: uv run python start.py
+        working-directory: script
+
+      - name: Sync generated data to workspace
         run: |
-          rm -rf gamedata/en_US
-          rm -rf gamedata/ja_JP
-          \cp -rf gamedata_yoster/en_US/ gamedata/en_US
-          \cp -rf gamedata_yoster/ja_JP/ gamedata/ja_JP
-
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          architecture: x64
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip 
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip wheel setuptools
-          pip install -r script/requirements.txt
-          pip install aiohttp
+          cp -r script/data/ data/
+          cp -r script/hash/ hash/
 
       - name: Update
-        run: |
-          source venv/bin/activate
-          python script/start.py
-          python .github/scripts/update.py
+        run: python .github/scripts/update.py
 
       - name: Upload
         env:
           SERVER: ${{ secrets.SERVER }}
           KEY: ${{ secrets.KEY }}
-        run: |
-          source venv/bin/activate
-          python .github/scripts/upload.py
+        run: uv run --directory script python ${{ github.workspace }}/.github/scripts/upload.py
         if: env.update == 1
 
       - name: Commit Change
         run: |
-          source venv/bin/activate
           python .github/scripts/commit.py
           git push
         if: env.update == 1
