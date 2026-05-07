@@ -2,8 +2,7 @@ name: Auto Update
 
 on:
   push:
-  issue_comment:
-    types: [ created ]
+  workflow_dispatch:
   schedule:
     - cron: '10 0/1 * * *'
 
@@ -13,6 +12,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Force upload on manual trigger
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "force=1" >> $GITHUB_ENV
 
       - name: GetScript
         uses: actions/checkout@v4
@@ -50,13 +53,13 @@ jobs:
           SERVER: ${{ secrets.SERVER }}
           KEY: ${{ secrets.KEY }}
         run: uv run --directory script python ${{ github.workspace }}/.github/scripts/upload.py
-        if: env.update == 1
+        if: env.update == 1 || env.force == 1
 
       - name: Commit Change
         run: |
           python .github/scripts/commit.py
           git push
-        if: env.update == 1
+        if: env.update == 1 || env.force == 1
 
       - name: Generate Token
         id: token
@@ -65,7 +68,7 @@ jobs:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_KEY }}
           repository: ArknightsSearch/ArknightsSearch-resource
-        if: env.update == 1
+        if: env.update == 1 || env.force == 1
 
       - name: GetResourceRepo
         uses: actions/checkout@v4
@@ -73,7 +76,7 @@ jobs:
           repository: ArknightsSearch/ArknightsSearch-resource
           path: resource
           token: ${{ steps.token.outputs.token }}
-        if: env.update == 1
+        if: env.update == 1 || env.force == 1
 
       - name: Commit Resource Change
         env:
@@ -87,4 +90,4 @@ jobs:
           git add data
           git commit -m "$MESSAGE"
           git push
-        if: env.update == 1
+        if: env.update == 1 || env.force == 1
